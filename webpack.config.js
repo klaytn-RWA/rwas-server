@@ -1,3 +1,5 @@
+// Copyright 2023 Transflox LLC. All rights reserved.
+
 const path = require("path");
 const nodeExternals = require("webpack-node-externals");
 const NodemonPlugin = require("nodemon-webpack-plugin");
@@ -7,14 +9,14 @@ module.exports = {
   devtool: "source-map",
   target: "node",
   externals: [nodeExternals()],
-  resolve: {extensions: [".ts", ".tsx", ".js"]},
+  resolve: { extensions: [".ts", ".tsx", ".js"] },
   module: {
     rules: [
-      {test: /\.tsx?$/, use: "ts-loader", exclude: /node_modules/},
-      {test: /\.js$/, loader: "source-map-loader"},
+      { test: /\.tsx?$/, use: "ts-loader", exclude: /node_modules/ },
+      { test: /\.js$/, loader: "source-map-loader" },
     ],
   },
-  output: {filename: "main.js", path: path.resolve(__dirname, "dist")},
+  output: { filename: "main.js", path: path.resolve(__dirname, "dist") },
   experiments: {
     topLevelAwait: true,
   },
