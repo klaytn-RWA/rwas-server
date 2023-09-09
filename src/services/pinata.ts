@@ -1,12 +1,12 @@
 import pinataSDK from "@pinata/sdk";
 
-export const PinataUpload = async (attributes: Array<Object>) => {
+export const PinataUpload = async (img: string, attributes: Array<Object>) => {
   const pinata = new pinataSDK({ pinataApiKey: process.env.PINATA_KEY, pinataSecretApiKey: process.env.PINATA_SECRET });
-  const res = await pinata.testAuthentication();
+
   const data = {
-    name: "Transca RWAs",
+    name: "Transca RWAs NFT",
     description: "This is Transca RWAs NFT collection!",
-    image: "https://ipfs.io/ipfs/QmXiYvoxPD1jNNuADR6duUoF8tszLxqUBVPyBLVRUFKsch",
+    image: img,
     attributes: attributes,
   };
 

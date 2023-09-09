@@ -320,6 +320,73 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "assetId",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "_value",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "assets",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "assetId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "int256",
+        "name": "weight",
+        "type": "int256"
+      },
+      {
+        "internalType": "string",
+        "name": "indentifierCode",
+        "type": "string"
+      },
+      {
+        "internalType": "uint16",
+        "name": "assetType",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint256",
+        "name": "startTime",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "expireTime",
+        "type": "uint256"
+      },
+      {
+        "internalType": "int256",
+        "name": "userDefinePrice",
+        "type": "int256"
+      },
+      {
+        "internalType": "int256",
+        "name": "appraisalPrice",
+        "type": "int256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -352,63 +419,69 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "userAddress",
+        "type": "address"
+      }
+    ],
     "name": "getAllAssetByUser",
     "outputs": [
       {
         "components": [
           {
             "internalType": "address",
-            "name": "_owner",
+            "name": "owner",
             "type": "address"
           },
           {
             "internalType": "uint256",
-            "name": "_assetId",
+            "name": "assetId",
             "type": "uint256"
           },
           {
             "internalType": "int256",
-            "name": "_weight",
+            "name": "weight",
             "type": "int256"
           },
           {
             "internalType": "string",
-            "name": "_indentifierCode",
+            "name": "indentifierCode",
             "type": "string"
           },
           {
             "internalType": "uint16",
-            "name": "_assetType",
+            "name": "assetType",
             "type": "uint16"
           },
           {
             "internalType": "uint256",
-            "name": "_startTime",
+            "name": "startTime",
             "type": "uint256"
           },
           {
             "internalType": "uint256",
-            "name": "_expireTime",
+            "name": "expireTime",
             "type": "uint256"
           },
           {
             "internalType": "int256",
-            "name": "_oraklPrice",
+            "name": "oraklPrice",
             "type": "int256"
           },
           {
-            "internalType": "uint256",
-            "name": "_userDefinePrice",
-            "type": "uint256"
+            "internalType": "int256",
+            "name": "userDefinePrice",
+            "type": "int256"
           },
           {
-            "internalType": "uint256",
-            "name": "_appraisalPrice",
-            "type": "uint256"
+            "internalType": "int256",
+            "name": "appraisalPrice",
+            "type": "int256"
           }
         ],
-        "internalType": "struct TranscaAssetNFT.AssetR[]",
+        "internalType": "struct ITransca.AssetR[]",
         "name": "",
         "type": "tuple[]"
       }
@@ -439,7 +512,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "_in_asset_id",
+        "name": "_assetId",
         "type": "uint256"
       }
     ],
@@ -449,56 +522,117 @@
         "components": [
           {
             "internalType": "address",
-            "name": "_owner",
+            "name": "owner",
             "type": "address"
           },
           {
             "internalType": "uint256",
-            "name": "_assetId",
+            "name": "assetId",
             "type": "uint256"
           },
           {
             "internalType": "int256",
-            "name": "_weight",
+            "name": "weight",
             "type": "int256"
           },
           {
             "internalType": "string",
-            "name": "_indentifierCode",
+            "name": "indentifierCode",
             "type": "string"
           },
           {
             "internalType": "uint16",
-            "name": "_assetType",
+            "name": "assetType",
             "type": "uint16"
           },
           {
             "internalType": "uint256",
-            "name": "_startTime",
+            "name": "startTime",
             "type": "uint256"
           },
           {
             "internalType": "uint256",
-            "name": "_expireTime",
+            "name": "expireTime",
             "type": "uint256"
           },
           {
             "internalType": "int256",
-            "name": "_oraklPrice",
+            "name": "oraklPrice",
             "type": "int256"
           },
           {
+            "internalType": "int256",
+            "name": "userDefinePrice",
+            "type": "int256"
+          },
+          {
+            "internalType": "int256",
+            "name": "appraisalPrice",
+            "type": "int256"
+          }
+        ],
+        "internalType": "struct ITransca.AssetR",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_assetId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getAssetDetailNonOracle",
+    "outputs": [
+      {
+        "components": [
+          {
             "internalType": "uint256",
-            "name": "_userDefinePrice",
+            "name": "assetId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "int256",
+            "name": "weight",
+            "type": "int256"
+          },
+          {
+            "internalType": "string",
+            "name": "indentifierCode",
+            "type": "string"
+          },
+          {
+            "internalType": "uint16",
+            "name": "assetType",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint256",
+            "name": "startTime",
             "type": "uint256"
           },
           {
             "internalType": "uint256",
-            "name": "_appraisalPrice",
+            "name": "expireTime",
             "type": "uint256"
+          },
+          {
+            "internalType": "int256",
+            "name": "userDefinePrice",
+            "type": "int256"
+          },
+          {
+            "internalType": "int256",
+            "name": "appraisalPrice",
+            "type": "int256"
           }
         ],
-        "internalType": "struct TranscaAssetNFT.AssetR",
+        "internalType": "struct ITransca.Asset",
         "name": "",
         "type": "tuple"
       }
@@ -666,60 +800,6 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "physicalAssetAttribute",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "_assetId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "int256",
-        "name": "_weight",
-        "type": "int256"
-      },
-      {
-        "internalType": "string",
-        "name": "_indentifierCode",
-        "type": "string"
-      },
-      {
-        "internalType": "uint16",
-        "name": "_assetType",
-        "type": "uint16"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_startTime",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_expireTime",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_userDefinePrice",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_appraisalPrice",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "bytes32",
         "name": "role",
         "type": "bytes32"
@@ -762,38 +842,38 @@
       },
       {
         "internalType": "int256",
-        "name": "_in_weight",
+        "name": "_weight",
         "type": "int256"
       },
       {
         "internalType": "uint256",
-        "name": "_in_expire_time",
+        "name": "_expireTime",
         "type": "uint256"
       },
       {
         "internalType": "uint16",
-        "name": "_in_assetType",
+        "name": "_assetType",
         "type": "uint16"
       },
       {
         "internalType": "string",
-        "name": "_in_identifierCode",
+        "name": "_indentifierCode",
         "type": "string"
       },
       {
         "internalType": "string",
-        "name": "_in_token_uri",
+        "name": "_tokenUri",
         "type": "string"
       },
       {
-        "internalType": "uint256",
-        "name": "_in_user_define_price",
-        "type": "uint256"
+        "internalType": "int256",
+        "name": "_userDefinePrice",
+        "type": "int256"
       },
       {
-        "internalType": "uint256",
-        "name": "in_appraisal_price",
-        "type": "uint256"
+        "internalType": "int256",
+        "name": "_appraisalPrice",
+        "type": "int256"
       }
     ],
     "name": "safeMint",
@@ -885,59 +965,6 @@
       }
     ],
     "name": "setApprovalForAll",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_userAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_id",
-        "type": "uint256"
-      },
-      {
-        "internalType": "int256",
-        "name": "_weight",
-        "type": "int256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_startTime",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_expireTime",
-        "type": "uint256"
-      },
-      {
-        "internalType": "string",
-        "name": "_indentifierCode",
-        "type": "string"
-      },
-      {
-        "internalType": "uint16",
-        "name": "_assetType",
-        "type": "uint16"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_userDefinePrice",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_appraisalPrice",
-        "type": "uint256"
-      }
-    ],
-    "name": "setAsset",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

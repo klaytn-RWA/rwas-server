@@ -22,10 +22,10 @@ export async function mintNFT(toAddress, weightParseUnit, expireTime, asset_type
       gasPrice: gasFee,
       nonce: nonce,
     });
-    console.log("...Submitting transaction with gas price of:", ethers.utils.formatUnits(gasFee, "gwei"), " - & nonce:", nonce);
+    console.log("7s200:Gas price", ethers.utils.formatUnits(gasFee, "gwei"), " - & nonce:", nonce);
     let signedTxn = (await wallet).sendTransaction(rawTxn);
     let reciept = await (await signedTxn).wait();
-    console.log("7s200:receipt", reciept);
+    console.log("7s200:Reciept", reciept);
     if (reciept) {
       return reciept;
     } else {
