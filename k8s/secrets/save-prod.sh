@@ -1,0 +1,1 @@
+kubectl apply -f ./gen.secrets-prod.yml

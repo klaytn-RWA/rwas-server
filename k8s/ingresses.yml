@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  name: klaytn
+  namespace: staging
+spec:
+  rules:
+    - host: api.transca.kitchen
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: klaytn
+                port:
+                  number: 3333

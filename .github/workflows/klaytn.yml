@@ -1,0 +1,105 @@
+name: klaytn
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  CODENAME: balue
+  CLUSTER: balue
+  CURRENT_SERVICE: klaytn
+  SERVICE_TYPE: backend
+  NAMESPACE: staging
+  AWS_USER_ID: 779570069348
+  AWS_REGION: ap-south-1
+  TAG: ${{ github.run_id }}
+
+jobs:
+  install-build-and-push-job-to-k8s:
+    name: klaytn
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 8
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build job
+        run: pnpm build
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to ECR
+        run: |-
+          aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_USER_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
+
+      - name: Login to K8S
+        run: |
+          aws eks --region ${AWS_REGION} update-kubeconfig --name ${CLUSTER}
+          kubectl config use-context arn:aws:eks:${AWS_REGION}:${AWS_USER_ID}:cluster/${CLUSTER}
+
+      - name: Inspect tool
+        run: |-
+          node --version
+          yarn --version
+          aws --version
+          docker --version
+          kubectl version
+
+      - name: Build and push Job Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: ${{ env.AWS_USER_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.CODENAME }}/${{ env.NAMESPACE }}/${{ env.CURRENT_SERVICE }}:latest,${{ env.AWS_USER_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.CODENAME }}/${{ env.NAMESPACE }}/${{ env.CURRENT_SERVICE }}:${{ env.TAG }}
+          cache-from: type=registry,ref=${{ env.AWS_USER_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.CODENAME }}/${{ env.NAMESPACE }}/${{ env.CURRENT_SERVICE }}:latest
+          cache-to: type=inline
+
+      - name: Render Deployment YAML
+        uses: nowactions/envsubst@v1
+        with:
+          input: ./deployment.yml
+          output: ./gen.deployment.yml
+
+      - name: Apply to K8S
+        run: |-
+          kubectl apply -f ./gen.deployment.yml
+          kubectl rollout status deployment/${CURRENT_SERVICE} -n staging
+          kubectl get services -o wide
