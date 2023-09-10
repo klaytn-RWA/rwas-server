@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npx env-cmd webpack --mode development --watch",
     "build": "webpack --mode production",
-    "prod": "node --trace-warnings --harmony-top-level-await --es-module-specifier-resolution=node dist/main.js",
+    "prod": "node --trace-warnings --es-module-specifier-resolution=node dist/main.js",
     "start:ngrok": "ngrok http 5000"
   },
   "keywords": [],
