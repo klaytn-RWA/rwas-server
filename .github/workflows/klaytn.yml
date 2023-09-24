@@ -6,12 +6,12 @@ on:
   workflow_dispatch:
 
 env:
-  CODENAME: balue
-  CLUSTER: balue
+  CODENAME: movechess
+  CLUSTER: movechess
   CURRENT_SERVICE: klaytn
   SERVICE_TYPE: backend
   NAMESPACE: staging
-  AWS_USER_ID: 779570069348
+  AWS_USER_ID: 649145334474
   AWS_REGION: ap-south-1
   TAG: ${{ github.run_id }}
 
