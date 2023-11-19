@@ -149,9 +149,115 @@ import { randomString } from "./utils/random";
         };
         return;
       }
+
       ctx.body = {
         ipfs_hash: `https://ipfs.io/ipfs/${upload.IpfsHash}`,
         reciept: mintReceipt,
+      };
+    } catch (error) {
+      ctx.body = error;
+    }
+  });
+
+  router.post("/create-mint-request", async (ctx) => {
+    const { to, weight, asset_type, indentifier_code, user_define_price, appraisal_price } = ctx.request.body as MintReq;
+    try {
+      ctx.body = ctx.request.body;
+      const startTime = new Date().valueOf();
+      const expireTime = startTime + 100000000;
+      const weightParseUnit = ethers.utils.parseUnits(weight.toString(), 10);
+      const useDefineBigNumber = ethers.BigNumber.from(user_define_price ? user_define_price : 0);
+      const appraisalPriceBigNumber = ethers.BigNumber.from(appraisal_price ? appraisal_price : 0);
+      const indentifierCode = indentifier_code + randomString();
+      const attributes = [
+        {
+          trait_type: "assetType",
+          value: asset_type,
+        },
+        {
+          trait_type: "weight",
+          value: weightParseUnit,
+        },
+        {
+          trait_type: "indentifierCode",
+          value: indentifierCode,
+        },
+        {
+          trait_type: "userDefinePrice",
+          value: useDefineBigNumber,
+        },
+        {
+          trait_type: "appraisalPrice",
+          value: appraisalPriceBigNumber,
+        },
+      ];
+      let img = "";
+      // GOLD
+      if (asset_type === 0) {
+        if (weight > 0 && weight < 5) {
+          img = NFTImgae.GOLD1;
+        }
+        if (weight >= 5 && weight < 6) {
+          img = NFTImgae.GOLD2;
+        }
+        if (weight >= 6) {
+          img = NFTImgae.GOLD3;
+        }
+      }
+      // DIAMOND
+      if (asset_type === 1) {
+        if (weight > 0 && weight <= 1) {
+          img = NFTImgae.DIAMOND1;
+        }
+        if (weight > 1 && weight <= 2) {
+          img = NFTImgae.DIAMOND2;
+        }
+        if (weight > 2 && weight <= 3) {
+          img = NFTImgae.DIAMOND3;
+        }
+      }
+      // OTHER
+      if (asset_type === 2) {
+        const indetifierPrefix = indentifier_code.split("-")[0];
+        if (indetifierPrefix === "PATEK1") {
+          img = NFTImgae.PATEK1;
+        }
+        if (indetifierPrefix === "AP1") {
+          img = NFTImgae.AP1;
+        }
+        if (indetifierPrefix === "AP2") {
+          img = NFTImgae.AP2;
+        }
+        if (indetifierPrefix === "MONKEY1") {
+          img = NFTImgae.MONKEY1;
+        }
+        if (indetifierPrefix === "MONKEY2") {
+          img = NFTImgae.MONKEY2;
+        }
+        if (indetifierPrefix === "MONKEY3") {
+          img = NFTImgae.MONKEY3;
+        }
+      }
+
+      // Upload to pinata
+      const upload = await PinataUpload(img, attributes);
+      if (!upload.IpfsHash) {
+        ctx.body = {
+          status: 400,
+          message: upload,
+        };
+        return;
+      }
+      ctx.body = {
+        ipfs_hash: `https://ipfs.io/ipfs/${upload.IpfsHash}`,
+        to,
+        weight,
+        asset_type,
+        indentifier_code,
+        user_define_price,
+        appraisal_price,
+        expireTime,
+        img: img,
       };
     } catch (error) {
       ctx.body = error;

@@ -6,6 +6,7 @@ export const wallet = new ethers.Wallet(process.env.ACCOUNT_KEY!, provider);
 export const transcaAssetNFTContract = new ethers.Contract(process.env.TRANSCA_NFT_SMC_ADDRESS!, abi, provider);
 
 export async function getNonce(wallet) {
+  console.log("7s200:1", process.env.RPC_URL);
   let nonce = await provider.getTransactionCount(wallet.address);
   return nonce;
 }
