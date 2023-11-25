@@ -9,7 +9,6 @@ import { mintNFT, transcaAssetNFTContract, wallet } from "./services/ether";
 import * as ethers from "ethers";
 import { corsMiddleware } from "./middleware/cors";
 import { randomString } from "./utils/random";
-
 (async function main() {
   const app = new Koa();
 

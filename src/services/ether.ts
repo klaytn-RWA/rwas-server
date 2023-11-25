@@ -1,5 +1,6 @@
 import * as ethers from "ethers";
 import abi from "../abi/TranscaAssetNFT.json";
+require("dotenv").config();
 
 export const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL!);
 export const wallet = new ethers.Wallet(process.env.ACCOUNT_KEY!, provider);
