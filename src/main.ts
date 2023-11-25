@@ -5,7 +5,7 @@ import helmet from "koa-helmet";
 import bodyParser from "koa-bodyparser";
 import logger from "./utils/log";
 import { PinataUpload } from "./services/pinata";
-import { mintNFT, transcaAssetNFTContract, wallet } from "./services/ether";
+import { mintNFT } from "./services/ether";
 import * as ethers from "ethers";
 import { corsMiddleware } from "./middleware/cors";
 import { randomString } from "./utils/random";
@@ -158,6 +158,10 @@ import { randomString } from "./utils/random";
     }
   });
 
+  router.get("/live-api", (ctx) => {
+    ctx.body = "Hello World";
+  });
+
   router.post("/create-mint-request", async (ctx) => {
     const { to, weight, asset_type, indentifier_code, user_define_price, appraisal_price } = ctx.request.body as MintReq;
     try {
@@ -266,7 +270,7 @@ import { randomString } from "./utils/random";
   app.use(router.routes());
   app.use(router.allowedMethods());
 
-  const port = 3333;
+  const port = process.env.PORT || 3000;
 
   app.listen(port);
   logger.info({ thread: "main", data: "service started", port });
