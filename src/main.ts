@@ -160,7 +160,7 @@ import cron from "node-cron";
   });
 
   router.get("/live-api", (ctx) => {
-    ctx.body = "Hello World 1";
+    ctx.body = "Hello World 3";
   });
 
   router.post("/create-mint-request", async (ctx) => {
@@ -273,13 +273,10 @@ import cron from "node-cron";
     const nonce = await getNonce(wallet);
     console.log("7s200:none", wallet.address);
     const gasFee = await getGasPrice();
-    let rawTxn = await transcaLotteryNFTContract.populateTransaction.createLottery(assetId, duration, {
-      gasPrice: gasFee,
-      nonce: nonce,
-    });
+    let rawTxn = await transcaLotteryNFTContract.populateTransaction.createLottery(assetId, duration);
     console.log("7s200:rwa", rawTxn);
 
-    let signedTxn = (await wallet).sendTransaction(rawTxn);
+    let signedTxn = await (await wallet).sendTransaction(rawTxn);
     console.log("7s200:sugb", signedTxn);
 
     let reciept = await (await signedTxn).wait();
@@ -304,7 +301,8 @@ import cron from "node-cron";
     if (lottery.winner !== "0x0000000000000000000000000000000000000000" && Number(lottery.winNumber) !== 0) {
       return;
     }
-    if (Number(lottery.expiredAt < time / 1000)) {
+    // console.log("7s200:lottery", Number(lottery.id), Number(lottery.winNumber));
+    if (Number(lottery.expiredAt) < time / 1000) {
       const nonce = await getNonce(wallet);
       const gasFee = await getGasPrice();
       let rawTxn = await transcaLotteryNFTContract.populateTransaction.updateWinNumber(Math.floor(Math.random() * 5), Number(lottery.id), {
@@ -313,6 +311,7 @@ import cron from "node-cron";
       });
       let signedTxn = await (await wallet).sendTransaction(rawTxn);
       let reciept = await (await signedTxn).wait();
+      console.log("7s200:", Number(lottery.id), reciept);
       return reciept;
     }
   });
