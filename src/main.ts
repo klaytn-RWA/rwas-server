@@ -5,15 +5,16 @@ import helmet from "koa-helmet";
 import bodyParser from "koa-bodyparser";
 import logger from "./utils/log";
 import { PinataUpload } from "./services/pinata";
-import { mintNFT } from "./services/ether";
+import { getGasPrice, getNonce, mintNFT, transcaLotteryNFTContract, wallet } from "./services/ether";
 import * as ethers from "ethers";
 import { corsMiddleware } from "./middleware/cors";
 import { randomString } from "./utils/random";
+import cron from "node-cron";
 (async function main() {
   const app = new Koa();
 
   //   app.use(cacheMiddleware);
-  app.use(koaLogger());
+  // app.use(koaLogger());
   app.use(helmet());
   app.use(helmet.hidePoweredBy());
   app.use(corsMiddleware);
@@ -159,7 +160,7 @@ import { randomString } from "./utils/random";
   });
 
   router.get("/live-api", (ctx) => {
-    ctx.body = "Hello World";
+    ctx.body = "Hello World 1";
   });
 
   router.post("/create-mint-request", async (ctx) => {
@@ -267,11 +268,60 @@ import { randomString } from "./utils/random";
     }
   });
 
+  router.post("/create-lottery", async (ctx) => {
+    const { assetId, duration } = ctx.request.body as any;
+    const nonce = await getNonce(wallet);
+    console.log("7s200:none", wallet.address);
+    const gasFee = await getGasPrice();
+    let rawTxn = await transcaLotteryNFTContract.populateTransaction.createLottery(assetId, duration, {
+      gasPrice: gasFee,
+      nonce: nonce,
+    });
+    console.log("7s200:rwa", rawTxn);
+
+    let signedTxn = (await wallet).sendTransaction(rawTxn);
+    console.log("7s200:sugb", signedTxn);
+
+    let reciept = await (await signedTxn).wait();
+    console.log("7s200:receipt", reciept);
+
+    if (reciept) {
+      ctx.body = {
+        data: reciept,
+        error: null,
+      };
+    } else {
+      ctx.body = {
+        error: true,
+      };
+    }
+  });
+
+  cron.schedule("*/5 * * * * *", async function () {
+    let lottery = await transcaLotteryNFTContract.getCurrentLottery();
+    const time = Date.now();
+
+    if (lottery.winner !== "0x0000000000000000000000000000000000000000" && Number(lottery.winNumber) !== 0) {
+      return;
+    }
+    if (Number(lottery.expiredAt < time / 1000)) {
+      const nonce = await getNonce(wallet);
+      const gasFee = await getGasPrice();
+      let rawTxn = await transcaLotteryNFTContract.populateTransaction.updateWinNumber(Math.floor(Math.random() * 5), Number(lottery.id), {
+        gasPrice: gasFee,
+        nonce: nonce,
+      });
+      let signedTxn = await (await wallet).sendTransaction(rawTxn);
+      let reciept = await (await signedTxn).wait();
+      return reciept;
+    }
+  });
+
   app.use(router.routes());
   app.use(router.allowedMethods());
 
   const port = process.env.PORT || 3000;
 
   app.listen(port);
-  logger.info({ thread: "main", data: "service started", port });
+  // logger.info({ thread: "main", data: "service started", port });
 })();
