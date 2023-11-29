@@ -296,7 +296,7 @@ import cron from "node-cron";
   cron.schedule("*/5 * * * * *", async function () {
     let lottery = await transcaLotteryNFTContract.getCurrentLottery();
     const time = Date.now();
-
+    console.log("7s200:lottery", lottery.isSuccess);
     if (lottery.isSuccess !== undefined && lottery.isSuccess === false) {
       if (Number(lottery.expiredAt) < time / 1000) {
         const nonce = await getNonce(wallet);

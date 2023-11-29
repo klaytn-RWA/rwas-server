@@ -349,6 +349,11 @@
             "internalType": "uint256",
             "name": "pricePerNumber",
             "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isSuccess",
+            "type": "bool"
           }
         ],
         "internalType": "struct Lottery.LotterySession",
@@ -415,6 +420,11 @@
             "internalType": "uint256",
             "name": "pricePerNumber",
             "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isSuccess",
+            "type": "bool"
           }
         ],
         "internalType": "struct Lottery.LotterySession",
@@ -578,6 +588,11 @@
         "internalType": "uint256",
         "name": "pricePerNumber",
         "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "isSuccess",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
