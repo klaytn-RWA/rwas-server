@@ -13,7 +13,6 @@ import cron from "node-cron";
 (async function main() {
   const app = new Koa();
 
-  //   app.use(cacheMiddleware);
   // app.use(koaLogger());
   app.use(helmet());
   app.use(helmet.hidePoweredBy());
@@ -160,7 +159,7 @@ import cron from "node-cron";
   });
 
   router.get("/live-api", (ctx) => {
-    ctx.body = "Hello World 4";
+    ctx.body = "Hello World 5";
   });
 
   router.post("/create-mint-request", async (ctx) => {
@@ -298,7 +297,7 @@ import cron from "node-cron";
     let lottery = await transcaLotteryNFTContract.getCurrentLottery();
     const time = Date.now();
 
-    if (lottery.winner === "0x0000000000000000000000000000000000000000" && Number(lottery.winNumber) === 0) {
+    if (!lottery.isSuccess) {
       if (Number(lottery.expiredAt) < time / 1000) {
         const nonce = await getNonce(wallet);
         const gasFee = await getGasPrice();
