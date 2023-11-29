@@ -159,7 +159,7 @@ import cron from "node-cron";
   });
 
   router.get("/live-api", (ctx) => {
-    ctx.body = "Hello World 5";
+    ctx.body = "Hello World 6";
   });
 
   router.post("/create-mint-request", async (ctx) => {
@@ -297,7 +297,7 @@ import cron from "node-cron";
     let lottery = await transcaLotteryNFTContract.getCurrentLottery();
     const time = Date.now();
 
-    if (!lottery.isSuccess) {
+    if (lottery.isSuccess !== undefined && lottery.isSuccess === false) {
       if (Number(lottery.expiredAt) < time / 1000) {
         const nonce = await getNonce(wallet);
         const gasFee = await getGasPrice();
