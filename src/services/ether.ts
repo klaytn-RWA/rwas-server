@@ -9,12 +9,14 @@ export const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL
 // export const transcaLotteryNFTContract = new ethers.Contract(process.env.TRANSCA_LOTTERY_SMC_ADDRESS!, lotteryAbi, provider);
 
 export const wallet = new ethers.Wallet("bdc66a08d8799ff8c520daefb2f12e86a5a884f5645c85b3bd218fffb66b47c5", provider);
-export const transcaAssetNFTContract = new ethers.Contract("0xC101C2dbC5a93A7a3a527A1DD4a23C8d9A02DB7f", abi, provider);
-export const transcaLotteryNFTContract = new ethers.Contract("0x6224B03b7ee0aDDAFe59C1bCE16e15FfE66364CF", lotteryAbi, provider);
+export const transcaAssetNFTContract = new ethers.Contract("0x1601fB5Fd018F4df22F2cC4d1a6d05d17d651374", abi, provider);
+export const transcaLotteryNFTContract = new ethers.Contract("0x1d95310635AEc229A54448BF9Bd15dBDf8BB0f3c", lotteryAbi, provider);
 
 // TRANSCA_NFT_SMC_ADDRESS = "0xC101C2dbC5a93A7a3a527A1DD4a23C8d9A02DB7f";
 // TRANSCA_LOTTERY_SMC_ADDRESS = "0x6224B03b7ee0aDDAFe59C1bCE16e15FfE66364CF";
 // ACCOUNT_KEY = "bdc66a08d8799ff8c520daefb2f12e86a5a884f5645c85b3bd218fffb66b47c5";
+// TRANSCA_NFT_SMC_ADDRESS = "0x1601fB5Fd018F4df22F2cC4d1a6d05d17d651374";
+// TRANSCA_LOTTERY_SMC_ADDRESS = "0x1d95310635AEc229A54448BF9Bd15dBDf8BB0f3c";
 
 export async function getNonce(wallet) {
   let nonce = await provider.getTransactionCount(wallet.address);

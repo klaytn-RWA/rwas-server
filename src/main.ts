@@ -159,7 +159,7 @@ import cron from "node-cron";
   });
 
   router.get("/live-api", (ctx) => {
-    ctx.body = "Hello World 8";
+    ctx.body = "Hello World 9";
   });
 
   router.post("/create-mint-request", async (ctx) => {
