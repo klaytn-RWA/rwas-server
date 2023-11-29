@@ -159,7 +159,7 @@ import cron from "node-cron";
   });
 
   router.get("/live-api", (ctx) => {
-    ctx.body = "Hello World 7";
+    ctx.body = "Hello World 8";
   });
 
   router.post("/create-mint-request", async (ctx) => {
@@ -293,7 +293,7 @@ import cron from "node-cron";
     }
   });
 
-  cron.schedule("*/5 * * * * *", async function () {
+  cron.schedule("*/10 * * * * *", async function () {
     let lottery = await transcaLotteryNFTContract.getCurrentLottery();
     const time = Date.now();
     console.log("7s200:lottery", lottery.isSuccess);
