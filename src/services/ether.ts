@@ -4,9 +4,17 @@ import lotteryAbi from "../abi/Lottery.json";
 require("dotenv").config();
 
 export const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL!);
-export const wallet = new ethers.Wallet(process.env.ACCOUNT_KEY!, provider);
-export const transcaAssetNFTContract = new ethers.Contract(process.env.TRANSCA_NFT_SMC_ADDRESS!, abi, provider);
-export const transcaLotteryNFTContract = new ethers.Contract(process.env.TRANSCA_LOTTERY_SMC_ADDRESS!, lotteryAbi, provider);
+// export const wallet = new ethers.Wallet(process.env.ACCOUNT_KEY!, provider);
+// export const transcaAssetNFTContract = new ethers.Contract(process.env.TRANSCA_NFT_SMC_ADDRESS!, abi, provider);
+// export const transcaLotteryNFTContract = new ethers.Contract(process.env.TRANSCA_LOTTERY_SMC_ADDRESS!, lotteryAbi, provider);
+
+export const wallet = new ethers.Wallet("bdc66a08d8799ff8c520daefb2f12e86a5a884f5645c85b3bd218fffb66b47c5", provider);
+export const transcaAssetNFTContract = new ethers.Contract("0xC101C2dbC5a93A7a3a527A1DD4a23C8d9A02DB7f", abi, provider);
+export const transcaLotteryNFTContract = new ethers.Contract("0x6224B03b7ee0aDDAFe59C1bCE16e15FfE66364CF", lotteryAbi, provider);
+
+// TRANSCA_NFT_SMC_ADDRESS = "0xC101C2dbC5a93A7a3a527A1DD4a23C8d9A02DB7f";
+// TRANSCA_LOTTERY_SMC_ADDRESS = "0x6224B03b7ee0aDDAFe59C1bCE16e15FfE66364CF";
+// ACCOUNT_KEY = "bdc66a08d8799ff8c520daefb2f12e86a5a884f5645c85b3bd218fffb66b47c5";
 
 export async function getNonce(wallet) {
   let nonce = await provider.getTransactionCount(wallet.address);
